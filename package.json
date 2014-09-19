@@ -1,0 +1,22 @@
+{
+  "name": "mlpm-client",
+  "version": "0.0.0",
+  "description": "MarkLogic package manager client",
+  "main": "index.js",
+  "bin": {
+    "mlpm": "index.js"
+  },
+  "author": "joemfb",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "async": "^0.9.0",
+    "glob": "^4.0.6",
+    "jszip": "^2.4.0",
+    "lodash": "^2.4.1",
+    "mkdirp": "^0.5.0",
+    "prettyjson": "^1.0.0",
+    "request": "^2.42.0",
+    "vinyl-fs": "^0.3.7",
+    "yargs": "^1.3.1"
+  }
+}
