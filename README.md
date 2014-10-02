@@ -2,6 +2,14 @@
 
 node client for mlpm (a MarkLogic package manager)
 
+Install with npm:
+
+    npm install -g mlpm
+
+###### style
+
+comma-first, asi. *Come at me, bro!*
+
 - Copyright (c) 2014 Joseph Bryan. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
