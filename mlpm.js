@@ -8,6 +8,7 @@
     , init    = require('./lib/init.js')
     , install = require('./lib/install.js')
     , publish = require('./lib/publish.js')
+    , search =  require('./lib/search.js')
 
   switch(args.command) {
     case 'info':
@@ -21,6 +22,9 @@
       break
     case 'publish':
       publish()
+      break
+    case 'search':
+      search(args)
       break
     default:
       if (args.command) {

@@ -1,14 +1,33 @@
-##### mlpm-client
+##### mlpm
 
-node client for mlpm (a MarkLogic package manager)
+node command-line client for mlpm (a MarkLogic package manager)
 
-Install with npm:
+Install from npm: `npm install -g mlpm`
 
-    npm install -g mlpm
+##### usage
 
-###### style
+- `mlpm search $QUERY`: search for packages matching `$QUERY`
+- `mlpm info $NAME`: view metadata for package `$NAME`
+- `mlpm install $NAME`: install package `$NAME`
+- `mlpm init`: create a new package
+- `mlpm publish`: publish a package to the registry
+- `mlpm -h`: help
+
+##### style
 
 comma-first, asi. *Come at me, bro!*
+
+##### roadmap
+
+- command-specific help
+- prompt on downgrade install
+- semver
+- unpublish
+- registration
+- TLS
+- signed packages
+
+##### license
 
 - Copyright (c) 2014 Joseph Bryan. All Rights Reserved.
 
