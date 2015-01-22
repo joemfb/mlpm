@@ -21,7 +21,6 @@ comma-first, asi. *Come at me, bro!*
 
 - prompt on downgrade install
 - semver
-- unpublish
 - registration
 - TLS
 - signed packages

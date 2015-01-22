@@ -5,11 +5,12 @@
 
   var args = require('./lib/args.js')
     , cmds = {
-        info:    require('./lib/info.js'),
-        init:    require('./lib/init.js'),
-        install: require('./lib/install.js'),
-        publish: require('./lib/publish.js'),
-        search:  require('./lib/search.js')
+        info:      require('./lib/info.js'),
+        init:      require('./lib/init.js'),
+        install:   require('./lib/install.js'),
+        publish:   require('./lib/publish.js'),
+        search:    require('./lib/search.js'),
+        unpublish: require('./lib/unpublish.js')
       }
     , cmd
 
