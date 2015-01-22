@@ -19,7 +19,6 @@ comma-first, asi. *Come at me, bro!*
 
 ##### roadmap
 
-- command-specific help
 - prompt on downgrade install
 - semver
 - unpublish
