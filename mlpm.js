@@ -8,6 +8,7 @@
         info:      require('./lib/info.js'),
         init:      require('./lib/init.js'),
         install:   require('./lib/install.js'),
+        ls:        require('./lib/ls.js'),
         publish:   require('./lib/publish.js'),
         search:    require('./lib/search.js'),
         uninstall: require('./lib/uninstall.js'),
