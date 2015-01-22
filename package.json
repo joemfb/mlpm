@@ -21,6 +21,7 @@
     "prettyjson": "^1.0.0",
     "prompt": "^0.2.14",
     "request": "^2.42.0",
+    "rimraf": "^2.2.8",
     "vinyl-fs": "^0.3.7",
     "yargs": "^1.3.1"
   },

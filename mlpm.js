@@ -10,6 +10,7 @@
         install:   require('./lib/install.js'),
         publish:   require('./lib/publish.js'),
         search:    require('./lib/search.js'),
+        uninstall: require('./lib/uninstall.js'),
         unpublish: require('./lib/unpublish.js')
       }
     , cmd
