@@ -9,9 +9,13 @@ Install from npm: `npm install -g mlpm`
 - `mlpm search $QUERY`: search for packages matching `$QUERY`
 - `mlpm info $NAME`: view metadata for package `$NAME`
 - `mlpm install $NAME`: install package `$NAME`
+- `mlpm uninstall $NAME`: uninstall package `$NAME`
+- `mlpm ls`: list installed packages
 - `mlpm init`: create a new package
 - `mlpm publish`: publish a package to the registry
-- `mlpm -h`: help
+- `mlpm unpublish`: remove a package from the registry
+- `mlpm <cmd> -h`: command help
+- `mlpm -h`: general help
 
 ##### style
 
@@ -19,9 +23,9 @@ comma-first, asi. *Come at me, bro!*
 
 ##### roadmap
 
-- prompt on downgrade install
-- semver
 - registration
+- capture author info
+- semver
 - TLS
 - signed packages
 
