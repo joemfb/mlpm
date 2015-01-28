@@ -17,6 +17,10 @@ Install from npm: `npm install -g mlpm`
 - `mlpm <cmd> -h`: command help
 - `mlpm -h`: general help
 
+##### deployment
+
+Use [this gist](https://gist.github.com/joemfb/c786696f459290e57c73) as your `app_specific.rb` with [Roxy](https://github.com/marklogic/roxy). Then run `./ml <env> deploy_packages`. (TODO: full Roxy integration)
+
 ##### style
 
 comma-first, asi. *Come at me, bro!*
@@ -24,7 +28,6 @@ comma-first, asi. *Come at me, bro!*
 ##### roadmap
 
 - registration
-- capture author info
 - semver
 - TLS
 - signed packages
