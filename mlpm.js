@@ -4,32 +4,21 @@
   'use strict';
 
   var args = require('./lib/args.js')
-    , cmds = {
-        info:      require('./lib/info.js'),
-        init:      require('./lib/init.js'),
-        install:   require('./lib/install.js'),
-        ls:        require('./lib/ls.js'),
-        publish:   require('./lib/publish.js'),
-        search:    require('./lib/search.js'),
-        uninstall: require('./lib/uninstall.js'),
-        unpublish: require('./lib/unpublish.js')
-      }
     , cmd
 
-  if ( args.command ) {
-    cmd = cmds[ args.command ]
-
-    if ( cmd ) {
-      if ( args.help ) {
-        console.log( cmd.usage )
-      } else {
-        cmd( args )
-      }
-    } else {
-      console.log( 'unknown command: ' + args.command )
+  if ( !args.command ) {
+    if ( args.unknown ) {
+      console.log( 'unknown command: ' + args.unknown )
     }
+    return console.log( args.usage() )
+  }
+
+  cmd = require( './lib/' + args.command )
+
+  if ( args.help ) {
+    console.log( cmd.usage )
   } else {
-    console.log( args.usage() )
+    cmd( args )
   }
 
 })()
