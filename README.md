@@ -17,9 +17,11 @@ Install from npm: `npm install -g mlpm`
 - `mlpm <cmd> -h`: command help
 - `mlpm -h`: general help
 
+To publish/unpublish packages, register at http://registry.demo.marklogic.com/ with your github account, then run `mlpm login` with your API token.
+
 ##### deployment
 
-Use [this gist](https://gist.github.com/joemfb/c786696f459290e57c73) as your `app_specific.rb` with [Roxy](https://github.com/marklogic/roxy). Then run `./ml <env> deploy_packages`. (TODO: full Roxy integration)
+Use [this gist](https://gist.github.com/joemfb/c786696f459290e57c73) as your `app_specific.rb` with [Roxy](https://github.com/marklogic/roxy). Then run `./ml <env> deploy_packages`. (TODO: full Roxy integration, see marklogic/roxy#357)
 
 ##### style
 
