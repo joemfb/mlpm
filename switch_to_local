@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ -f ~/.mlpmrc.local ]
+then
+  mv ~/.mlpmrc{,.registry}
+  mv ~/.mlpmrc{.local,}
+
+  npm install -g .
+else
+  echo 'already switched'
+fi
