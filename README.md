@@ -29,7 +29,6 @@ comma-first, asi. *Come at me, bro!*
 
 ##### roadmap
 
-- registration
 - semver
 - TLS
 - signed packages
