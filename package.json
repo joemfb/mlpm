@@ -2,12 +2,12 @@
   "name": "mlpm",
   "version": "0.3.0",
   "description": "the client for mlpm, a MarkLogic package manager",
-  "main": "index.js",
+  "main": "mlpm.js",
   "bin": {
     "mlpm": "mlpm.js"
   },
   "scripts": {
-    "lint": "jshint *.js lib/*.js"
+    "lint": "jshint *.js lib/*.js lib/*/*.js"
   },
   "author": "joemfb",
   "license": "Apache-2.0",
