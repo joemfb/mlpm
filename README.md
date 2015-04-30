@@ -21,17 +21,30 @@ To publish/unpublish packages, register at http://registry.demo.marklogic.com/ w
 
 ##### deployment
 
-Use [this gist](https://gist.github.com/joemfb/c786696f459290e57c73) as your `app_specific.rb` with [Roxy](https://github.com/marklogic/roxy). Then run `./ml <env> deploy_packages`. (TODO: full Roxy integration, see marklogic/roxy#357)
+mlpm is optimized for the MarkLogic REST API; here's how you deploy installed packages to a REST API instance:
+
+    mlpm deploy -u <user> -p <password> -H <host> -P <port>
+
+TODO: Privileges?
+
+Some applications are developed across multiple environments, and the [Roxy](https://github.com/marklogic/roxy) deployer has great multi-environment support. To integrate mlpm deployment with Roxy, add the following to <code>deploy/app_specific.rb</code>:
+
+```ruby
+def deploy_packages
+  system %Q!mlpm deploy -u #{ @properties['ml.user'] } \
+                        -p #{ @properties['ml.password'] } \
+                        -H #{ @properties['ml.server'] } \
+                        -P #{ @properties['ml.app-port'] }!
+end
+```
+
+Now you can run
+
+    ./ml <env> deploy_packages
 
 ##### style
 
 comma-first, asi. *Come at me, bro!*
-
-##### roadmap
-
-- semver
-- TLS
-- signed packages
 
 ##### license
 

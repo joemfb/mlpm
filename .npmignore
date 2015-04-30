@@ -1,5 +1,7 @@
 modules.txt
 notes.txt
+others.txt
 deploy.rb
 test.js
 prompt-properties.js
+*.sjs
