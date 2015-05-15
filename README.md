@@ -1,5 +1,7 @@
 ##### mlpm
 
+[![Join the chat at https://gitter.im/joemfb/mlpm](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/joemfb/mlpm?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 node command-line client for mlpm (a MarkLogic package manager)
 
 Install from npm: `npm install -g mlpm`
