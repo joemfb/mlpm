@@ -1,6 +1,6 @@
 {
   "name": "mlpm",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "the client for mlpm, a MarkLogic package manager",
   "main": "mlpm.js",
   "bin": {
