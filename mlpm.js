@@ -9,6 +9,10 @@ function run() {
     , cmd
 
   if ( !args.command ) {
+    if ( args.argv.version ) {
+      return console.log( require('./package.json').version )
+    }
+
     if ( args.unknown ) {
       console.log( 'unknown command: ' + args.unknown )
     }
