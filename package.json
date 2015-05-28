@@ -17,6 +17,7 @@
     "columnify": "^1.3.2",
     "concat-stream": "^1.4.8",
     "glob": "^4.0.6",
+    "gulp-git": "^1.2.4",
     "hash.js": "^1.0.2",
     "jszip": "^2.4.0",
     "lodash": "^3.7.0",
