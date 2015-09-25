@@ -5,3 +5,4 @@ dist
 *.map
 .DS_Store
 Thumbs.db
+coverage
