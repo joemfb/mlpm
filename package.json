@@ -7,7 +7,7 @@
   },
   "scripts": {
     "lint": "jshint *.js lib/*.js lib/*/*.js",
-    "test": "istanbul cover _mocha test/*"
+    "test": "istanbul cover _mocha test/* test/lib/*"
   },
   "author": "joemfb",
   "license": "Apache-2.0",
