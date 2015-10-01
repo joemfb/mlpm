@@ -1,22 +1,31 @@
 #!/usr/bin/env node
 'use strict'
 
+var log = require('winston')
 var args = require('../lib/args.js').parse()
 var cmd
 
+log.remove(log.transports.Console)
+log.add(log.transports.Console, { showLevel: false })
+
 if ( !args.command ) {
   if ( args.argv.version ) {
-    return console.log( require('../package.json').version )
+    return log.info( require('../package.json').version )
   }
 
   if ( args.unknown ) {
-    console.log( 'unknown command: ' + args.unknown )
+    log.info( 'unknown command: ' + args.unknown )
   }
-  return console.log( args.usage() )
+  return log.info( args.usage() )
 }
 
 cmd = require( '../lib/commands/' + args.command )
 
-if ( args.help ) return console.log( cmd.usage )
+if ( args.help ) return log.info( cmd.usage )
+
+// configure logs for commands
+if ( args.q ) {
+  log.level = 'error'
+}
 
 cmd( args )

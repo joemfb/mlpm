@@ -11,6 +11,13 @@ var _ = require('lodash')
 var sandbox = sinon.sandbox.create()
 var argsLib = { parse: sandbox.stub() }
 var util = { getConfig: sandbox.stub() }
+var log = {
+  transports: {},
+  remove: sandbox.stub(),
+  add: sandbox.stub(),
+  error: sandbox.stub(),
+  info: sandbox.stub()
+}
 
 var defaultArgs = {
   argv: {},
@@ -23,6 +30,7 @@ describe('mlpm cli', function() {
   })
 
   beforeEach(function() {
+    mockery.registerMock('winston', log)
     mockery.registerMock('../lib/args.js', argsLib)
     mockery.registerMock('../util.js', util)
     mockery.registerAllowables(['../package.json', '../lib/commands/whoami'])
@@ -49,9 +57,9 @@ describe('mlpm cli', function() {
     argsLib.parse.returns(args)
     require('../bin/mlpm.js')
 
-    // TODO: mock console.log, or use a logging lib
-    // expect(log).to have been called with ...
     expect(defaultArgs.usage.calledOnce).to.be.true
+    expect(log.info.calledTwice).to.be.true
+    expect(log.info.args[0][0]).to.equal('unknown command: blah')
   })
 
   it('should print version', function() {
@@ -59,8 +67,8 @@ describe('mlpm cli', function() {
     argsLib.parse.returns(args)
     require('../bin/mlpm.js')
 
-    // TODO: mock console.log, or use a logging lib
-    // expect(log).to have been called with ...
+    expect(log.info.calledOnce).to.be.true
+    expect(log.info.args[0][0]).to.equal( require('../package.json').version )
   })
 
   it('should run command', function() {
@@ -78,7 +86,17 @@ describe('mlpm cli', function() {
     argsLib.parse.returns(args)
     require('../bin/mlpm.js')
 
-    // TODO: mock console.log, or use a logging lib
-    // expect(log).to have been called with ...
+    expect(log.info.calledOnce).to.be.true
+    expect(log.info.args[0][0]).to.equal('mlpm whoami')
+  })
+
+  it('should set log level', function() {
+    expect(log.level).to.be.undefined
+
+    var args = _.assign(_.cloneDeep(defaultArgs), { command: 'whoami', q: true })
+    argsLib.parse.returns(args)
+    require('../bin/mlpm.js')
+
+    expect(log.level).to.equal('error')
   })
 })
