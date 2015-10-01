@@ -9,6 +9,10 @@ var sandbox = sinon.sandbox.create()
 var api = { info: sandbox.stub() }
 var project = { getConfig: sandbox.stub() }
 var prettyjson = { render: sandbox.stub() }
+var log = {
+  error: sandbox.stub(),
+  info: sandbox.stub()
+}
 
 var info
 
@@ -18,6 +22,7 @@ describe('commands/info', function() {
   })
 
   beforeEach(function() {
+    mockery.registerMock('winston', log)
     mockery.registerMock('prettyjson', prettyjson)
     mockery.registerMock('../project.js', project)
     mockery.registerMock('../api.js', api)
@@ -46,10 +51,10 @@ describe('commands/info', function() {
 
     info({})
 
-    // TODO: mock console.log, or use a logging framework
     process.nextTick(function() {
       expect(project.getConfig.calledOnce).to.be.true
       expect(prettyjson.render.calledOnce).to.be.true
+      expect(log.info.calledOnce).to.be.true
       done()
     })
   })
@@ -59,10 +64,11 @@ describe('commands/info', function() {
 
     info({ package: 'blah' })
 
-    // TODO: mock console.log, or use a logging framework
     process.nextTick(function() {
       expect(api.info.calledOnce).to.be.true
       expect(prettyjson.render.calledOnce).to.be.false
+      expect(log.error.calledOnce).to.be.true
+      expect(log.error.args[0][0]).to.match(/blah/)
       done()
     })
   })

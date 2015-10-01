@@ -11,6 +11,10 @@ var project = {
   getConfig: sandbox.stub().yields(null, { name: 'foo' }),
   deleteDependency: sandbox.stub().yields(null, [{ path: 'mlpm.json' }])
 }
+var log = {
+  error: sandbox.stub(),
+  info: sandbox.stub()
+}
 
 var uninstall
 
@@ -20,6 +24,7 @@ describe('commands/uninstall', function() {
   })
 
   beforeEach(function() {
+    mockery.registerMock('winston', log)
     mockery.registerMock('../project.js', project)
     mockery.registerMock('../package.js', pkgLib)
 
@@ -45,33 +50,85 @@ describe('commands/uninstall', function() {
   it('should not uninstall without package name', function(done) {
     uninstall({})
 
-    // TODO: mock console.log, or use a logging framework
     process.nextTick(function() {
       expect(pkgLib.uninstall.calledOnce).to.be.false
+      sinon.assert.calledOnce(log.error)
+      expect(log.error.args[0][0]).to.match(/missing required parameter/)
       done()
     })
   })
 
-  it('should uninstall package', function(done) {
+  it('should handle error uninstalling package', function(done) {
+    pkgLib.uninstall.yieldsAsync(new Error('no way, jose'))
+
     uninstall({ package: 'foo' })
 
-    // TODO: mock console.log, or use a logging framework
     process.nextTick(function() {
       expect(pkgLib.uninstall.calledOnce).to.be.true
       expect(project.getConfig.calledOnce).to.be.false
+      sinon.assert.calledOnce(log.error)
+      expect(log.error.args[0][0]).to.match(/no way, jose/)
       done()
     })
   })
 
   it('should uninstall package', function(done) {
+    pkgLib.uninstall.yieldsAsync(null)
+
+    uninstall({ package: 'foo' })
+
+    process.nextTick(function() {
+      expect(pkgLib.uninstall.calledOnce).to.be.true
+      expect(project.getConfig.calledOnce).to.be.false
+      sinon.assert.calledOnce(log.info)
+      expect(log.info.args[0][0]).to.match(/uninstalled foo/)
+      done()
+    })
+  })
+
+  it('should handler error getting config', function(done) {
+    project.getConfig.yieldsAsync(new Error('where is it?'))
+
     uninstall({ package: 'foo', save: true })
 
-    // TODO: mock console.log, or use a logging framework
-    process.nextTick(function() {
+    setTimeout(function() {
+      expect(pkgLib.uninstall.calledOnce).to.be.true
+      expect(project.getConfig.calledOnce).to.be.true
+      sinon.assert.calledOnce(log.error)
+      expect(log.error.args[0][0]).to.match(/where is it/)
+      done()
+    }, 1)
+  })
+
+  it('should handler error removing dependency from mlpm.json', function(done) {
+    project.getConfig.yieldsAsync(null, { name: 'foo' })
+    project.deleteDependency.yieldsAsync(new Error('it\'s not working'))
+
+    uninstall({ package: 'foo', save: true })
+
+    setTimeout(function() {
       expect(pkgLib.uninstall.calledOnce).to.be.true
       expect(project.getConfig.calledOnce).to.be.true
       expect(project.deleteDependency.calledOnce).to.be.true
+      sinon.assert.calledOnce(log.error)
+      expect(log.error.args[0][0]).to.match(/it's not working/)
       done()
-    })
+    }, 1)
+  })
+
+  it('should uninstall package, and remove from mlpm.json', function(done) {
+    project.deleteDependency.yieldsAsync(null)
+
+    uninstall({ package: 'foo', save: true })
+
+    setTimeout(function() {
+      expect(pkgLib.uninstall.calledOnce).to.be.true
+      expect(project.getConfig.calledOnce).to.be.true
+      expect(project.deleteDependency.calledOnce).to.be.true
+      sinon.assert.calledTwice(log.info)
+      expect(log.info.args[0][0]).to.match(/uninstalled foo/)
+      expect(log.info.args[1][0]).to.match(/removed foo/)
+      done()
+    }, 1)
   })
 })

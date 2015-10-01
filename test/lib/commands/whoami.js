@@ -7,6 +7,10 @@ var mockery = require('mockery')
 
 var sandbox = sinon.sandbox.create()
 var util = { getConfig: sandbox.stub() }
+var log = {
+  error: sandbox.stub(),
+  info: sandbox.stub()
+}
 
 var whoami
 
@@ -16,6 +20,7 @@ describe('commands/whoami', function() {
   })
 
   beforeEach(function() {
+    mockery.registerMock('winston', log)
     mockery.registerMock('../util.js', util)
 
     mockery.registerAllowable('../../../lib/commands/whoami.js', true)
@@ -38,13 +43,14 @@ describe('commands/whoami', function() {
   })
 
   it('should get user config', function(done) {
-    util.getConfig.onCall(0).yields(null, {})
+    util.getConfig.onCall(0).yields(null, { username: 'blah' })
 
     whoami({})
 
-    // TODO: mock console.log, or use a logging framework
     process.nextTick(function() {
       expect(util.getConfig.calledOnce).to.be.true
+      expect(log.info.calledOnce).to.be.true
+      expect(log.info.args[0][0]).to.equal('blah')
       done()
     })
   })
@@ -54,9 +60,10 @@ describe('commands/whoami', function() {
 
     whoami({})
 
-    // TODO: mock console.log, or use a logging framework
     process.nextTick(function() {
       expect(util.getConfig.calledOnce).to.be.true
+      expect(log.error.calledOnce).to.be.true
+      expect(log.error.args[0][0]).to.match(/ugh/)
       done()
     })
   })

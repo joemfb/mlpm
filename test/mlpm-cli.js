@@ -71,14 +71,20 @@ describe('mlpm cli', function() {
     expect(log.info.args[0][0]).to.equal( require('../package.json').version )
   })
 
-  it('should run command', function() {
+  it('should run command', function(done) {
     var args = _.assign(_.cloneDeep(defaultArgs), { command: 'whoami' })
     argsLib.parse.returns(args)
+    util.getConfig.yieldsAsync(null, { username: 'blah' })
+
     require('../bin/mlpm.js')
 
-    // TODO: mock console.log, or use a logging lib
-    // expect(log).to have been called with ...
-    expect(util.getConfig.calledOnce).to.be.true
+    process.nextTick(function() {
+      expect(util.getConfig.calledOnce).to.be.true
+
+      expect(log.info.calledOnce).to.be.true
+      expect(log.info.args[0][0]).to.equal('blah')
+      done()
+    })
   })
 
   it('should print command help', function() {

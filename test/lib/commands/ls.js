@@ -13,6 +13,10 @@ var project = {
     last: '_'
   }
 }
+var log = {
+  error: sandbox.stub(),
+  info: sandbox.stub()
+}
 
 var ls
 
@@ -22,6 +26,7 @@ describe('commands/ls', function() {
   })
 
   beforeEach(function() {
+    mockery.registerMock('winston', log)
     mockery.registerMock('../project.js', project)
     mockery.registerAllowable('lodash')
 
@@ -44,7 +49,7 @@ describe('commands/ls', function() {
     expect(Object.keys(ls).length).to.be.ok
   })
 
-  it('should get user config', function(done) {
+  it('should list packages', function(done) {
     project.getPackages.onCall(0).yields(null, [
       { name: 'foo', version: '1.2.3' },
       { name: 'bar', version: '3.2.1' }
@@ -52,9 +57,11 @@ describe('commands/ls', function() {
 
     ls({})
 
-    // TODO: mock console.log, or use a logging framework
     process.nextTick(function() {
       expect(project.getPackages.calledOnce).to.be.true
+      expect(log.info.calledTwice).to.be.true
+      expect(log.info.args[0][0]).to.match(/foo/)
+      expect(log.info.args[1][0]).to.match(/bar/)
       done()
     })
   })

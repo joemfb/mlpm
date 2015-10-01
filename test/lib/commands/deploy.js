@@ -25,6 +25,10 @@ var project = {
     last: '_'
   }
 }
+var log = {
+  error: sandbox.stub(),
+  info: sandbox.stub()
+}
 
 var deploy
 
@@ -34,6 +38,7 @@ describe('commands/deploy', function() {
   })
 
   beforeEach(function() {
+    mockery.registerMock('winston', log)
     mockery.registerMock('fs', fs)
     mockery.registerMock('request', request)
     mockery.registerMock('prompt', prompt)
@@ -59,6 +64,57 @@ describe('commands/deploy', function() {
     expect(deploy).to.not.be.undefined
     expect(deploy.usage).to.not.be.undefined
     expect(Object.keys(deploy).length).to.be.ok
+  })
+
+  it('should handle error getting connection', function(done) {
+    prompt.get.yieldsAsync(new Error('boom'))
+
+    deploy({})
+
+    setTimeout(function() {
+      sinon.assert.calledOnce(prompt.start)
+      sinon.assert.calledOnce(prompt.get)
+      sinon.assert.calledOnce(log.error)
+      expect(log.error.args[0][0]).to.match(/boom/)
+      done()
+    }, 1)
+  })
+
+  it('should handle error getting packages', function(done) {
+    project.getPackages.yieldsAsync(new Error('broke'))
+
+    deploy({ username: 'u', password: 'p' })
+
+    setTimeout(function() {
+      sinon.assert.calledOnce(project.getPackages)
+      sinon.assert.calledOnce(log.error)
+      expect(log.error.args[0][0]).to.match(/broke/)
+      done()
+    }, 1)
+  })
+
+  it('should prompt to get username', function(done) {
+    prompt.get.yieldsAsync(null, { username: 'z' })
+
+    deploy({ password: 'p' })
+
+    setTimeout(function() {
+      sinon.assert.calledOnce(prompt.start)
+      sinon.assert.calledOnce(prompt.get)
+      done()
+    }, 1)
+  })
+
+  it('should prompt to get password', function(done) {
+    prompt.get.yieldsAsync(null, {})
+
+    deploy({ username: 'u' })
+
+    setTimeout(function() {
+      sinon.assert.calledOnce(prompt.start)
+      sinon.assert.calledOnce(prompt.get)
+      done()
+    }, 1)
   })
 
   it('should deploy project', function(done) {
