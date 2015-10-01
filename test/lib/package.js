@@ -220,21 +220,15 @@ describe('lib/package', function() {
   })
 
   it('should get files', function(done) {
-    var stub = sinon.stub()
-
+    // TODO: mock vfs
     vfs.src.returns( vinylFs.src('./test/fixtures/files/*', { read: false }) )
 
-    pkg.getFiles('blah', stub)
-
-    expect(vfs.src.calledOnce).to.be.true
-
-    setTimeout(function() {
-      expect(stub.calledOnce).to.be.true
-      var args = stub.args[0][1]
-      expect(args[0]).to.match(/test.sjs$/)
-      expect(args[1]).to.match(/test.xqy$/)
+    pkg.getFiles('blah', function(err, files) {
+      expect(vfs.src.calledOnce).to.be.true
+      expect(files[0]).to.match(/test.sjs$/)
+      expect(files[1]).to.match(/test.xqy$/)
       done()
-    }, 10)
+    })
   })
 
   it('should parse deploy config', function() {
@@ -315,19 +309,14 @@ describe('lib/package', function() {
   })
 
   it('should parse contents', function(done) {
-    var stub = sinon.stub()
-
+    // TODO: mock vfs
+    // need to be able to set the paths
     vfs.src.returns( vinylFs.src('./test/fixtures/files/*', { read: false }) )
 
-    // TODO: need to make a vfs stream to be able to set the paths
-
-    pkg.parseContents({ name: 'foo' }, stub)
-
-    setTimeout(function() {
-      expect(stub.calledOnce).to.be.true
-      expect(stub.args[0][0]).to.be.match(/Path parsing error/)
+    pkg.parseContents({ name: 'foo' }, function(err) {
+      expect(err).to.be.match(/Path parsing error/)
       done()
-    }, 10)
+    })
   })
 
   it('should handle error when parsing contents', function(done) {
