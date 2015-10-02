@@ -337,25 +337,12 @@ describe('lib/package', function() {
     })
   })
 
-  it('should check if package is installed-1', function(done) {
-    util.readJson.yields(new Error('nope'))
+  it('should get package config', function(done) {
+    util.readJson.yieldsAsync(null, { name: 'foo' })
 
-    pkg.isInstalled('foo', '1.0.0', function(err, isInstalled) {
+    pkg.getConfig('foo', function(err, pkgConfig) {
       expect(util.readJson.calledOnce).to.be.true
-      expect(isInstalled).to.be.false
-
       var args = util.readJson.args[0]
-      expect(util.readJson.args[0][0]).to.equal('./mlpm_modules/foo/mlpm.json')
-      done()
-    })
-  })
-
-  it('should check if package is installed-2', function(done) {
-    util.readJson.yields(null, { name: 'foo' })
-
-    pkg.isInstalled('foo', '1.0.0', function(err, isInstalled) {
-      expect(util.readJson.calledOnce).to.be.true
-      expect(isInstalled).to.be.true
       expect(util.readJson.args[0][0]).to.equal('./mlpm_modules/foo/mlpm.json')
       done()
     })

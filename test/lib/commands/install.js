@@ -7,6 +7,7 @@ var mockery = require('mockery')
 
 var sandbox = sinon.sandbox.create()
 var pkgLib = {
+  getConfig: sandbox.stub(),
   isInstalled: sandbox.stub(),
   install: sandbox.stub()
 }
@@ -146,15 +147,15 @@ describe('commands/install', function() {
       }],
       "version":"1.1.0"
     })
-    pkgLib.isInstalled.withArgs('cts-extensions').yieldsAsync(null, true, {
+    pkgLib.getConfig.withArgs('cts-extensions').yieldsAsync(null, {
       name: 'cts-extensions',
       version: '1.1.2'
     })
-    pkgLib.isInstalled.withArgs('group-by').yieldsAsync(null, true, {
+    pkgLib.getConfig.withArgs('group-by').yieldsAsync(null, {
       name: 'group-by',
       version: '1.1.0'
     })
-    pkgLib.isInstalled.withArgs('bar').yieldsAsync(null, true, {
+    pkgLib.getConfig.withArgs('bar').yieldsAsync(null, {
       name: 'bar',
       version: '1.0.0'
     })
@@ -164,8 +165,8 @@ describe('commands/install', function() {
     setTimeout(function() {
       expect(project.getConfig.calledOnce).to.be.true
       expect(api.resolve.calledOnce).to.be.true
-      sinon.assert.calledThrice(pkgLib.isInstalled)
-      pkgLib.isInstalled.resetBehavior()
+      sinon.assert.calledThrice(pkgLib.getConfig)
+      pkgLib.getConfig.resetBehavior()
 
       sinon.assert.calledTwice(api.get)
       sinon.assert.calledOnce(log.info)
@@ -187,7 +188,7 @@ describe('commands/install', function() {
       }],
       "version":"1.1.0"
     })
-    pkgLib.isInstalled.yieldsAsync(null, false)
+    pkgLib.getConfig.yieldsAsync(new Error('not here'))
     api.get.yieldsAsync(new Error('something broke'))
 
     install({ package: 'group-by' })
@@ -195,7 +196,7 @@ describe('commands/install', function() {
     setTimeout(function() {
       expect(project.getConfig.calledOnce).to.be.true
       expect(api.resolve.calledOnce).to.be.true
-      sinon.assert.calledTwice(pkgLib.isInstalled)
+      sinon.assert.calledTwice(pkgLib.getConfig)
       sinon.assert.calledTwice(api.get)
       sinon.assert.calledOnce(log.error)
       expect(log.error.args[0][0]).to.match(/something broke/)
@@ -215,7 +216,7 @@ describe('commands/install', function() {
       }],
       "version":"1.1.0"
     })
-    pkgLib.isInstalled.yieldsAsync(null, false)
+    pkgLib.getConfig.yieldsAsync(new Error('not here'))
     api.get.yieldsAsync(null, {})
     pkgLib.install.yieldsAsync(null)
 
@@ -225,9 +226,9 @@ describe('commands/install', function() {
       expect(project.getConfig.calledOnce).to.be.true
       expect(api.resolve.calledOnce).to.be.true
 
-      sinon.assert.calledTwice(pkgLib.isInstalled)
-      expect(pkgLib.isInstalled.args[0][0]).to.equal('group-by')
-      expect(pkgLib.isInstalled.args[1][0]).to.equal('cts-extensions')
+      sinon.assert.calledTwice(pkgLib.getConfig)
+      expect(pkgLib.getConfig.args[0][0]).to.equal('group-by')
+      expect(pkgLib.getConfig.args[1][0]).to.equal('cts-extensions')
 
       sinon.assert.calledTwice(api.get)
       sinon.assert.calledTwice(pkgLib.install)
@@ -245,7 +246,7 @@ describe('commands/install', function() {
       "package":"cts-extensions",
       "version":"1.1.1"
     })
-    pkgLib.isInstalled.yieldsAsync(null, false)
+    pkgLib.getConfig.yieldsAsync(new Error('not here'))
     api.get.yieldsAsync(null, {})
     pkgLib.install.yieldsAsync(null)
     project.saveDependency.yieldsAsync(new Error('nope'))
@@ -255,7 +256,7 @@ describe('commands/install', function() {
     setTimeout(function() {
       expect(project.getConfig.calledOnce).to.be.true
       expect(api.resolve.calledOnce).to.be.true
-      sinon.assert.calledOnce(pkgLib.isInstalled)
+      sinon.assert.calledOnce(pkgLib.getConfig)
       sinon.assert.calledOnce(api.get)
       sinon.assert.calledOnce(pkgLib.install)
       sinon.assert.calledOnce(log.info)
@@ -273,7 +274,7 @@ describe('commands/install', function() {
       "package":"cts-extensions",
       "version":"1.1.1"
     })
-    pkgLib.isInstalled.yieldsAsync(null, false)
+    pkgLib.getConfig.yieldsAsync(new Error('not here'))
     api.get.yieldsAsync(null, {})
     pkgLib.install.yieldsAsync(null)
     project.saveDependency.yieldsAsync(null)
@@ -283,7 +284,7 @@ describe('commands/install', function() {
     setTimeout(function() {
       expect(project.getConfig.calledOnce).to.be.true
       expect(api.resolve.calledOnce).to.be.true
-      sinon.assert.calledOnce(pkgLib.isInstalled)
+      sinon.assert.calledOnce(pkgLib.getConfig)
       sinon.assert.calledOnce(api.get)
       sinon.assert.calledOnce(pkgLib.install)
       sinon.assert.calledTwice(log.info)
@@ -335,11 +336,11 @@ describe('commands/install', function() {
       "dependencies":[],
       "version":"1.1.0"
     })
-    pkgLib.isInstalled.withArgs('bar').yieldsAsync(null, true, {
+    pkgLib.getConfig.withArgs('bar').yieldsAsync(null, {
       name: 'bar',
       version: '1.0.0'
     })
-    pkgLib.isInstalled.withArgs('baz').yieldsAsync(null, true, {
+    pkgLib.getConfig.withArgs('baz').yieldsAsync(null, {
       name: 'baz',
       version: '1.0.0'
     })
@@ -351,7 +352,7 @@ describe('commands/install', function() {
     setTimeout(function() {
       sinon.assert.calledOnce(project.getConfig)
       sinon.assert.calledTwice(api.resolve)
-      sinon.assert.calledTwice(pkgLib.isInstalled)
+      sinon.assert.calledTwice(pkgLib.getConfig)
       sinon.assert.calledTwice(api.get)
       sinon.assert.calledTwice(pkgLib.install)
       sinon.assert.calledTwice(log.info)
