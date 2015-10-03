@@ -43,7 +43,7 @@ describe('commands/deploy', function() {
     mockery.registerAllowables(['async', 'lodash', 'url', 'path'])
 
     mockery.registerAllowable('../../../lib/commands/deploy.js', true)
-    deploy = require('../../../lib/commands/deploy.js')
+    deploy = require('../../../lib/commands/deploy.js').command
   })
 
   afterEach(function() {

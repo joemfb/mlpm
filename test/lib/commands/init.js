@@ -32,7 +32,7 @@ describe('commands/init', function() {
     mockery.registerAllowable('lodash')
 
     mockery.registerAllowable('../../../lib/commands/init.js', true)
-    init = require('../../../lib/commands/init.js')
+    init = require('../../../lib/commands/init.js').command
   })
 
   afterEach(function() {

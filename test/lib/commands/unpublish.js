@@ -24,7 +24,7 @@ describe('commands/unpublish', function() {
     mockery.registerMock('../api.js', api)
 
     mockery.registerAllowable('../../../lib/commands/unpublish.js', true)
-    unpublish = require('../../../lib/commands/unpublish.js')
+    unpublish = require('../../../lib/commands/unpublish.js').command
   })
 
   afterEach(function() {

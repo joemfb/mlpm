@@ -26,7 +26,7 @@ describe('commands/ls', function() {
     mockery.registerAllowable('lodash')
 
     mockery.registerAllowable('../../../lib/commands/ls.js', true)
-    ls = require('../../../lib/commands/ls.js')
+    ls = require('../../../lib/commands/ls.js').command
   })
 
   afterEach(function() {

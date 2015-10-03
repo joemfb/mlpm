@@ -30,7 +30,7 @@ describe('commands/version', function() {
     mockery.registerMock('../project.js', project)
 
     mockery.registerAllowable('../../../lib/commands/version.js', true)
-    version = require('../../../lib/commands/version.js')
+    version = require('../../../lib/commands/version.js').command
   })
 
   afterEach(function() {

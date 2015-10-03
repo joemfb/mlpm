@@ -19,7 +19,7 @@ if ( !args.command ) {
   return log.info( args.usage() )
 }
 
-cmd = require( '../lib/commands/' + args.command )
+cmd = require( '../lib/commands/' + args.command ).command
 
 if ( args.help ) return log.info( cmd.usage )
 

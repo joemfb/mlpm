@@ -36,7 +36,7 @@ describe('commands/info', function() {
     // mockery.registerAllowables(['lodash', 'hash.js'])
 
     mockery.registerAllowable('../../../lib/commands/publish.js', true)
-    publish = require('../../../lib/commands/publish.js')
+    publish = require('../../../lib/commands/publish.js').command
   })
 
   afterEach(function() {

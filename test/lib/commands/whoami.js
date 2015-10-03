@@ -19,7 +19,7 @@ describe('commands/whoami', function() {
     mockery.registerMock('../util.js', util)
 
     mockery.registerAllowable('../../../lib/commands/whoami.js', true)
-    whoami = require('../../../lib/commands/whoami.js')
+    whoami = require('../../../lib/commands/whoami.js').command
   })
 
   afterEach(function() {

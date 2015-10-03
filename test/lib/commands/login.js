@@ -29,7 +29,7 @@ describe('commands/login', function() {
     mockery.registerMock('../util.js', util)
 
     mockery.registerAllowable('../../../lib/commands/login.js', true)
-    login = require('../../../lib/commands/login.js')
+    login = require('../../../lib/commands/login.js').command
   })
 
   afterEach(function() {

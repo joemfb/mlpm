@@ -24,7 +24,7 @@ describe('commands/uninstall', function() {
     mockery.registerMock('../package.js', pkgLib)
 
     mockery.registerAllowable('../../../lib/commands/uninstall.js', true)
-    uninstall = require('../../../lib/commands/uninstall.js')
+    uninstall = require('../../../lib/commands/uninstall.js').command
   })
 
   afterEach(function() {

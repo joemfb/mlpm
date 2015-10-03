@@ -33,7 +33,7 @@ describe('commands/install', function() {
     mockery.registerAllowables(['async', 'lodash'])
 
     mockery.registerAllowable('../../../lib/commands/install.js', true)
-    install = require('../../../lib/commands/install.js')
+    install = require('../../../lib/commands/install.js').command
   })
 
   afterEach(function() {

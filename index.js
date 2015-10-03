@@ -10,5 +10,5 @@ log.level = 'error'
 
 _.each(argsLib.cmds, function(synonyms) {
   var cmd = synonyms[0]
-  module.exports[ cmd ] = require( './lib/commands/' + cmd )
+  module.exports[ cmd ] = require( './lib/commands/' + cmd ).command
 })

@@ -22,7 +22,7 @@ describe('commands/search', function() {
     mockery.registerAllowable('lodash')
 
     mockery.registerAllowable('../../../lib/commands/search.js', true)
-    search = require('../../../lib/commands/search.js')
+    search = require('../../../lib/commands/search.js').command
   })
 
   afterEach(function() {

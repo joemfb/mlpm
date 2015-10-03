@@ -23,7 +23,7 @@ describe('commands/info', function() {
     mockery.registerMock('../api.js', api)
 
     mockery.registerAllowable('../../../lib/commands/info.js', true)
-    info = require('../../../lib/commands/info.js')
+    info = require('../../../lib/commands/info.js').command
   })
 
   afterEach(function() {
