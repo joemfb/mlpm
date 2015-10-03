@@ -311,8 +311,7 @@ describe('lib/project', function() {
     vfs.src.returns( vinylFs.src('./test/fixtures/**/mlpm.json') )
 
     // need to actually sort
-    // should probably be in a separate describe() block for clarity
-    mockery.registerMock('toposort', actualToposort)
+    toposort = sinon.spy(actualToposort)
 
     project.getPackages(function(err, packages) {
       if (err) return done(err)
@@ -321,6 +320,8 @@ describe('lib/project', function() {
       expect(packages.length).to.equal(2)
       expect(packages[0].name).to.equal('cts-extensions')
       expect(packages[1].name).to.equal('group-by')
+
+      toposort = sandbox.stub()
       done()
     })
   })
