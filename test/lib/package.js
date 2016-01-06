@@ -109,6 +109,40 @@ describe('lib/package', function() {
     expect(args[1].ns).to.equal('bar')
   })
 
+  it('should handle whitespace in xqy library module', function() {
+    var cb = sinon.stub()
+    var resume = sinon.stub()
+    var close = sinon.stub()
+
+    util.readByLine.yields(' module  namespace  foo= "bar" ;', resume, close)
+    pkg.xqyMetadata('foo/bar.xqy', cb)
+
+    expect(resume.called).to.be.false
+    expect(close.calledOnce).to.be.true
+    expect(cb.calledOnce).to.be.true
+    var args = cb.args[0]
+    expect(args[0]).to.be.null
+    expect(args[1].type).to.equal('module')
+    expect(args[1].ns).to.equal('bar')
+  })
+
+  it('should continue with unparseable xqy library module namespace', function() {
+    var cb = sinon.stub()
+    var resume = sinon.stub()
+    var close = sinon.stub()
+
+    util.readByLine.yields('modulenamespace foo= "bar"', resume, close)
+    pkg.xqyMetadata('foo/bar.xqy', cb)
+
+    expect(resume.called).to.be.false
+    expect(close.calledOnce).to.be.true
+    expect(cb.calledOnce).to.be.true
+    var args = cb.args[0]
+    expect(args[0]).to.be.null
+    expect(args[1].type).to.equal('module')
+    expect(args[1].ns).to.be.null
+  })
+
   it('should get xqy rest resource metadata', function() {
     var cb = sinon.stub()
     var resume = sinon.stub()
