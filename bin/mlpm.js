@@ -9,7 +9,7 @@ log.remove(log.transports.Console)
 log.add(log.transports.Console, { showLevel: false })
 
 if ( !args.command ) {
-  if ( args.argv.version ) {
+  if ( args.version ) {
     return log.info( require('../package.json').version )
   }
 

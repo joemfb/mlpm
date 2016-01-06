@@ -58,6 +58,14 @@ describe('lib/args', function() {
     expect(args.unknown).to.be.undefined
   })
 
+  it('should parse args with unknown command', function() {
+    yargs.argv._ = ['zzz']
+
+    var args = argsLib.parse()
+    expect(args.unknown).to.equal('zzz')
+    expect(args.command).to.be.undefined
+  })
+
   it('should parse args with search query', function() {
     yargs.argv._ = ['search', 'for', 'this']
 

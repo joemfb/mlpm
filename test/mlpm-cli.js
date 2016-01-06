@@ -63,7 +63,7 @@ describe('mlpm cli', function() {
   })
 
   it('should print version', function() {
-    var args = _.assign(_.cloneDeep(defaultArgs), { argv: { version: true } })
+    var args = _.assign(_.cloneDeep(defaultArgs), { version: true })
     argsLib.parse.returns(args)
     require('../bin/mlpm.js')
 
