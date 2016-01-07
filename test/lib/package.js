@@ -7,10 +7,14 @@ var mockery = require('mockery')
 
 var vinylFs = require('vinyl-fs')
 var JSZip = require('jszip')
+var Readable = require('stream').Readable
 
 var sandbox = sinon.sandbox.create()
 
-var fs = { writeFile: sandbox.stub() }
+var fs = {
+  writeFile: sandbox.stub(),
+  createReadStream: sandbox.stub()
+}
 var util = {
   readJson: sandbox.stub(),
   readByLine: sandbox.stub()
@@ -19,7 +23,7 @@ var vfs = { src: sandbox.stub() }
 var mkdirp = sandbox.stub()
 var rimraf = sandbox.stub()
 
-var pkg
+var pkg, actualUtils
 
 describe('lib/package', function() {
   before(function() {
@@ -45,8 +49,10 @@ describe('lib/package', function() {
     // ])
 
     mockery.registerAllowable('../../lib/package.js', true)
+    mockery.registerAllowable('../../lib/util.js', true)
 
     pkg = require('../../lib/package.js')
+    actualUtils = require('../../lib/util.js')
   })
 
   afterEach(function() {
@@ -177,6 +183,34 @@ describe('lib/package', function() {
     expect(args[1].type).to.equal('transform')
     expect(args[1].ns).to.equal('http://marklogic.com/rest-api/transform/bar')
     expect(args[1].name).to.equal('bar')
+  })
+
+  it('should get metadata by means of default callback', function(done) {
+    // all this insanity is to temporary create a stub that can call through
+    var currentStub = util.readByLine;
+    var tmp = { readByLine: function() {} }
+    sinon.stub(tmp, 'readByLine', function() {
+      return actualUtils.readByLine.apply(actualUtils, arguments)
+    })
+    util.readByLine = tmp.readByLine
+
+    var cb = sinon.stub()
+
+    var rs = new Readable()
+    rs.push('xquery version "1.0";\n\nfn:string(1)\n')
+    rs.push(null)
+
+    fs.createReadStream.returns(rs)
+
+    pkg.xqyMetadata('foo/bar.xqy', cb)
+
+    setTimeout(function() {
+     expect(cb.calledOnce).to.be.true
+     done()
+    }, 10)
+
+    // reset stub
+    util.readByLine = currentStub
   })
 
   it('should get file format from path', function() {

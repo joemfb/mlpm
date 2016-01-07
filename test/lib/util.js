@@ -158,6 +158,8 @@ describe('lib/util', function() {
   })
 
   it('should read file by line', function(done) {
+    var end = sinon.stub()
+
     var rs = new Readable()
     rs.push('foo\nbar')
     rs.push(null)
@@ -176,8 +178,43 @@ describe('lib/util', function() {
         expect(fs.createReadStream.calledOnce).to.be.true
         expect(line).to.equal('bar')
         close()
-        done()
       }
-    })
+    }, end)
+
+    setTimeout(function() {
+      expect(end.called).to.be.false
+      done()
+    }, 0)
+  })
+
+  it('should read file by line, yielding the default callback', function(done) {
+    var end = sinon.stub()
+
+    var rs = new Readable()
+    rs.push('foo\nbar')
+    rs.push(null)
+
+    fs.createReadStream.returns(rs)
+
+    var counter = 0
+
+    util.readByLine('path/to/file.txt', function(line, resume, close) {
+      if (counter === 0) {
+        expect(fs.createReadStream.calledOnce).to.be.true
+        expect(line).to.equal('foo')
+        counter++
+        resume()
+      } else {
+        expect(fs.createReadStream.calledOnce).to.be.true
+        expect(line).to.equal('bar')
+        // resume here, instead of close
+        resume()
+      }
+    }, end)
+
+    setTimeout(function() {
+      expect(end.calledOnce).to.be.true
+      done()
+    }, 0)
   })
 })
